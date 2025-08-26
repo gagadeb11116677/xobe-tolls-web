@@ -10,18 +10,17 @@
 - Tidak ada bug konversi  
 
 ---
-
 ## 📁 Tools yang Tersedia  
 
-| **Kategori**  | **Tools** |
-|---------------|-----------|
-| 🖼️ **Gambar** | JPG ⇄ PNG, WebP ⇄ JPG, Resize, Compress, Grayscale, Flip, Rotate |
-| 📄 **PDF**    | Gambar → PDF, PDF → Gambar (JPG/PNG), Merge PDF, Split PDF |
-| 🎵 **Audio/Video** | Audio → MP3/WAV, Video → MP4/GIF (preview + download) |
-| 📑 **Dokumen** | TXT ↔ Base64, CSV → JSON, JSON → CSV, DOCX → TXT |
-| ✍️ **Text**   | Case Converter, JSON Formatter, QR Generator, Password Generator |
-| 🎨 **Color**  | Color Picker, Palette Generator, Gradient Generator |
-| 🛠️ **Lainnya** | QR Scanner, File Info, Screen Recorder (beta), Webcam Capture |
+| **Kategori**   | **Tools** |
+|----------------|-----------|
+| 🖼️ **Image**   | Convert (JPG ⇄ PNG ⇄ WebP), Resize, Grayscale |
+| 📄 **PDF**     | Images → PDF, Split PDF *(coming soon)* |
+| 📝 **Text**    | Case Converter, JSON Formatter/Minifier, QR Generator |
+| 🎨 **Color**   | Color Picker (HEX & RGB + Copy) |
+| 📊 **File Info** | Detail file: nama, ukuran, tipe, last modified |
+| 🔐 **Password** | Generator + Copy |
+
 
 ---
 
