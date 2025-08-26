@@ -1,4 +1,4 @@
-# ⚡ XOBE Tools Converter Web  
+# ⚡ XOBE All Tools v2.0  
 
 ✅ **Fitur Baru & Peningkatan Besar-besaran (v2.0)**  
 - 18+ tools dalam 1 file  
@@ -32,4 +32,18 @@
 
 ---
 
-🚀 Dengan **XOBE Tools Converter Web**, semua kebutuhan konversi file & utilitas ringan bisa dilakukan hanya dari 1 halaman HTML!
+## ℹ️ Informasi Proyek  
+- **Nama:** XOBE All Tools v2.0  
+- **Developer:** XOBE Dev  
+- **Lisensi:** Gratis & Open-source untuk penggunaan pribadi  
+- **Kontribusi:** Pull Request & Issue akan dibuka di GitHub (coming soon)  
+
+---
+
+## ⚠️ Catatan  
+- Fitur **PDF → Gambar** memerlukan browser modern dengan dukungan **Canvas**  
+- **QR Scanner & Webcam Recorder** akan ditambahkan di **v3.0**  
+
+---
+
+🚀 Dengan **XOBE All Tools v2.0**, semua kebutuhan konversi file & utilitas ringan bisa dilakukan hanya dari **1 halaman HTML!**
