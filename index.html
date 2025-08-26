@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>XOBE All Tools v2.0</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --surface: rgba(30, 41, 59, 0.7);
+      --primary: #6366f1;
+      --accent: #06b6d4;
+      --text: #f8fafc;
+      --border: rgba(255,255,255,.1);
+    }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui}
+    body{background:var(--bg);color:var(--text);padding:2rem}
+    header{text-align:center;margin-bottom:2rem}
+    h1{font-size:2.5rem;background:linear-gradient(90deg,var(--primary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.5rem}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:1rem;padding:1.5rem;backdrop-filter:blur(10px)}
+    .card h2{margin-bottom:.5rem;font-size:1.2rem}
+    .btn{background:linear-gradient(90deg,var(--primary),var(--accent));border:none;padding:.5rem 1rem;border-radius:.5rem;color:#fff;cursor:pointer;margin:.25rem}
+    .btn:disabled{opacity:.5}
+    textarea,input[type=file]{width:100%;margin-top:.5rem}
+    textarea{background:#111827;border:1px solid var(--border);color:#fff;padding:.5rem;border-radius:.5rem;resize:vertical}
+    .tabs{display:flex;gap:.5rem;margin-bottom:.5rem;flex-wrap:wrap}
+    .tab{background:#1e293b;padding:.3rem .6rem;border-radius:.4rem;cursor:pointer;font-size:.8rem}
+    .tab.active{background:var(--primary)}
+    .tab-content{display:none}
+    .tab-content.active{display:block}
+    .preview img{max-width:100%;border-radius:.5rem;margin-top:.5rem}
+    .footer{text-align:center;margin-top:3rem;color:#64748b}
+    .toast{position:fixed;top:1rem;right:1rem;background:#10b981;color:#fff;padding:.75rem 1rem;border-radius:.5rem;transform:translateX(150%);transition:.3s}
+    .toast.show{transform:translateX(0)}
+  </style>
+</head>
+<body>
+<header>
+  <h1>XOBE All Tools v2.0</h1>
+  <p>Serba Guna Digital — Offline Friendly — Modern UI</p>
+</header>
+
+<div class="grid">
+
+  <!-- IMAGE -->
+  <div class="card">
+    <h2>🖼️ Image Tools</h2>
+    <div class="tabs">
+      <span class="tab active" onclick="openTab(this,'img-convert')">Convert</span>
+      <span class="tab" onclick="openTab(this,'img-resize')">Resize</span>
+      <span class="tab" onclick="openTab(this,'img-gray')">Grayscale</span>
+    </div>
+
+    <div id="img-convert" class="tab-content active">
+      <input type="file" accept="image/*" id="imgFile">
+      <select id="imgFormat">
+        <option value="image/png">PNG</option>
+        <option value="image/jpeg">JPG</option>
+        <option value="image/webp">WebP</option>
+      </select>
+      <button class="btn" onclick="convertImage()">Convert</button>
+      <a id="imgDownload" class="btn" style="display:none">Download</a>
+    </div>
+
+    <div id="img-resize" class="tab-content">
+      <input type="file" accept="image/*" id="resizeFile">
+      <input type="number" placeholder="Width px" id="resizeW">
+      <input type="number" placeholder="Height px" id="resizeH">
+      <button class="btn" onclick="resizeImage()">Resize</button>
+      <a id="resizeDownload" class="btn" style="display:none">Download</a>
+    </div>
+
+    <div id="img-gray" class="tab-content">
+      <input type="file" accept="image/*" id="grayFile">
+      <button class="btn" onclick="grayscaleImage()">Grayscale</button>
+      <a id="grayDownload" class="btn" style="display:none">Download</a>
+    </div>
+  </div>
+
+  <!-- PDF -->
+  <div class="card">
+    <h2>📄 PDF Tools</h2>
+    <div class="tabs">
+      <span class="tab active" onclick="openTab(this,'pdf-create')">Images → PDF</span>
+      <span class="tab" onclick="openTab(this,'pdf-split')">Split PDF</span>
+    </div>
+
+    <div id="pdf-create" class="tab-content active">
+      <input type="file" accept="image/*" multiple id="pdfImages">
+      <button class="btn" onclick="imagesToPDF()">Create PDF</button>
+      <a id="pdfDownload" class="btn" style="display:none">Download PDF</a>
+    </div>
+
+    <div id="pdf-split" class="tab-content">
+      <input type="file" accept="application/pdf" id="splitPdf">
+      <button class="btn" onclick="splitPDF()">Split (soon)</button>
+    </div>
+  </div>
+
+  <!-- TEXT -->
+  <div class="card">
+    <h2>📝 Text Tools</h2>
+    <div class="tabs">
+      <span class="tab active" onclick="openTab(this,'text-case')">Case</span>
+      <span class="tab" onclick="openTab(this,'text-json')">JSON</span>
+      <span class="tab" onclick="openTab(this,'text-qr')">QR</span>
+    </div>
+
+    <div id="text-case" class="tab-content active">
+      <textarea id="caseInput" rows="3" placeholder="Teks..."></textarea>
+      <button class="btn" onclick="changeCase('upper')">UPPER</button>
+      <button class="btn" onclick="changeCase('lower')">lower</button>
+      <button class="btn" onclick="changeCase('cap')">Capitalize</button>
+      <textarea id="caseOutput" rows="3" readonly></textarea>
+    </div>
+
+    <div id="text-json" class="tab-content">
+      <textarea id="jsonInput" rows="4" placeholder="JSON..."></textarea>
+      <button class="btn" onclick="formatJSON()">Format</button>
+      <button class="btn" onclick="minifyJSON()">Minify</button>
+      <textarea id="jsonOutput" rows="4" readonly></textarea>
+    </div>
+
+    <div id="text-qr" class="tab-content">
+      <input id="qrText" placeholder="Teks untuk QR">
+      <button class="btn" onclick="generateQR()">Generate QR</button>
+      <br><img id="qrImg" style="max-width:150px;margin-top:.5rem">
+    </div>
+  </div>
+
+  <!-- COLOR -->
+  <div class="card">
+    <h2>🎨 Color Tools</h2>
+    <input type="color" id="colorPicker" value="#6366f1">
+    <p>HEX: <span id="hexOut">#6366f1</span></p>
+    <p>RGB: <span id="rgbOut">rgb(99,102,241)</span></p>
+    <button class="btn" onclick="copyColor('hex')">Copy HEX</button>
+    <button class="btn" onclick="copyColor('rgb')">Copy RGB</button>
+  </div>
+
+  <!-- FILE INFO -->
+  <div class="card">
+    <h2>📊 File Info</h2>
+    <input type="file" id="infoFile">
+    <div id="fileInfo"></div>
+  </div>
+
+  <!-- PASSWORD -->
+  <div class="card">
+    <h2>🔐 Password Generator</h2>
+    <input type="number" id="passLength" value="12" min="4" max="64">
+    <button class="btn" onclick="generatePassword()">Generate</button>
+    <input type="text" id="password" readonly>
+    <button class="btn" onclick="copyPassword()">Copy</button>
+  </div>
+
+</div>
+
+<footer class="footer">
+  &copy; 2025 XOBE Dev — XOBE All Tools v2.0
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<!-- CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
+function openTab(el,name){
+  const card=el.closest('.card');
+  card.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  card.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById(name).classList.add('active');
+}
+// IMAGE
+function convertImage(){
+  const f=document.getElementById('imgFile').files[0];
+  if(!f){toast('Pilih gambar');return}
+  const fmt=document.getElementById('imgFormat').value;
+  const img=new Image();
+  img.onload=()=>{
+    const c=document.createElement('canvas');
+    [c.width,c.height]=[img.width,img.height];
+    c.getContext('2d').drawImage(img,0,0);
+    c.toBlob(b=>{
+      const url=URL.createObjectURL(b);
+      document.getElementById('imgDownload').href=url;
+      document.getElementById('imgDownload').download='converted.'+fmt.split('/')[1];
+      document.getElementById('imgDownload').style.display='inline-block';
+    },fmt,0.9);
+  }
+  img.src=URL.createObjectURL(f);
+}
+function resizeImage(){
+  const f=document.getElementById('resizeFile').files[0];
+  const w=parseInt(document.getElementById('resizeW').value);
+  const h=parseInt(document.getElementById('resizeH').value);
+  if(!f||!w||!h){toast('Isi data');return}
+  const img=new Image();
+  img.onload=()=>{
+    const c=document.createElement('canvas');
+    c.width=w;c.height=h;
+    c.getContext('2d').drawImage(img,0,0,w,h);
+    c.toBlob(b=>{
+      const url=URL.createObjectURL(b);
+      document.getElementById('resizeDownload').href=url;
+      document.getElementById('resizeDownload').download='resized.png';
+      document.getElementById('resizeDownload').style.display='inline-block';
+    });
+  }
+  img.src=URL.createObjectURL(f);
+}
+function grayscaleImage(){
+  const f=document.getElementById('grayFile').files[0];
+  if(!f){toast('Pilih gambar');return}
+  const img=new Image();
+  img.onload=()=>{
+    const c=document.createElement('canvas');
+    [c.width,c.height]=[img.width,img.height];
+    const ctx=c.getContext('2d');
+    ctx.drawImage(img,0,0);
+    ctx.filter='grayscale(100%)';
+    ctx.drawImage(img,0,0);
+    c.toBlob(b=>{
+      const url=URL.createObjectURL(b);
+      document.getElementById('grayDownload').href=url;
+      document.getElementById('grayDownload').download='gray.png';
+      document.getElementById('grayDownload').style.display='inline-block';
+    });
+  }
+  img.src=URL.createObjectURL(f);
+}
+// PDF
+function imagesToPDF(){
+  const files=document.getElementById('pdfImages').files;
+  if(!files.length){toast('Pilih gambar');return}
+  const {jsPDF}=window;
+  const pdf=new jsPDF();
+  let loaded=0;
+  Array.from(files).forEach((file,i)=>{
+    const reader=new FileReader();
+    reader.onload=e=>{
+      const img=new Image();
+      img.onload=()=>{
+        if(i)pdf.addPage();
+        const w=pdf.internal.pageSize.getWidth();
+        const h=pdf.internal.pageSize.getHeight();
+        pdf.addImage(e.target.result,'JPEG',0,0,w,h);
+        loaded++;
+        if(loaded===files.length){
+          const blob=pdf.output('blob');
+          document.getElementById('pdfDownload').href=URL.createObjectURL(blob);
+          document.getElementById('pdfDownload').download='output.pdf';
+          document.getElementById('pdfDownload').style.display='inline-block';
+          toast('PDF selesai');
+        }
+      }
+      img.src=e.target.result;
+    }
+    reader.readAsDataURL(file);
+  });
+}
+// TEXT
+function changeCase(type){
+  const val=document.getElementById('caseInput').value;
+  let out='';
+  switch(type){
+    case 'upper':out=val.toUpperCase();break;
+    case 'lower':out=val.toLowerCase();break;
+    case 'cap':out=val.replace(/\b\w/g,l=>l.toUpperCase());break;
+  }
+  document.getElementById('caseOutput').value=out;
+}
+function formatJSON(){
+  try{
+    const v=JSON.parse(document.getElementById('jsonInput').value);
+    document.getElementById('jsonOutput').value=JSON.stringify(v,null,2);
+  }catch(e){toast('JSON invalid')}
+}
+function minifyJSON(){
+  try{
+    const v=JSON.parse(document.getElementById('jsonInput').value);
+    document.getElementById('jsonOutput').value=JSON.stringify(v);
+  }catch(e){toast('JSON invalid')}
+}
+function generateQR(){
+  const t=document.getElementById('qrText').value;
+  if(!t){toast('Isi teks');return}
+  document.getElementById('qrImg').src=`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(t)}`;
+}
+// COLOR
+document.getElementById('colorPicker').addEventListener('input',e=>{
+  const c=e.target.value;
+  document.getElementById('hexOut').textContent=c;
+  const r=parseInt(c.slice(1,3),16);
+  const g=parseInt(c.slice(3,5),16);
+  const b=parseInt(c.slice(5,7),16);
+  document.getElementById('rgbOut').textContent=`rgb(${r},${g},${b})`;
+});
+function copyColor(type){
+  const t=document.getElementById(type==='hex'?'hexOut':'rgbOut').textContent;
+  navigator.clipboard.writeText(t);toast('Copied');
+}
+// FILE INFO
+document.getElementById('infoFile').addEventListener('change',e=>{
+  const f=e.target.files[0];
+  if(!f)return;
+  document.getElementById('fileInfo').innerHTML=`
+    <p>Nama: ${f.name}</p>
+    <p>Ukuran: ${(f.size/1024).toFixed(2)} KB</p>
+    <p>Tipe: ${f.type}</p>
+    <p>Terakhir diubah: ${f.lastModifiedDate.toLocaleString()}</p>
+  `;
+});
+// PASSWORD
+function generatePassword(){
+  const len=parseInt(document.getElementById('passLength').value);
+  const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+  let pwd='';
+  for(let i=0;i<len;i++) pwd+=chars[Math.floor(Math.random()*chars.length)];
+  document.getElementById('password').value=pwd;
+}
+function copyPassword(){
+  const pwd=document.getElementById('password').value;
+  if(!pwd){toast('Generate dulu');return}
+  navigator.clipboard.writeText(pwd);toast('Password copied');
+}
+</script>
+</body>
+</html>
